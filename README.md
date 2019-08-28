@@ -57,8 +57,53 @@
 https://api.telegram.org/bot{token}/setWebhook?url={url}
 ```
 
+- URL 패턴 예시
+
+```
+https://nsdf33.ngrok.io/{token값}
+https://my-project.herokuapp.com/{token값}
+```
+
 url을 만들기 위해서는 배포 및 도메인이 필요하지만, `ngrok`이라는 서비스를 통해서 로컬서버에 도메인을 부여할 수 있다.
 
 ```bash
 $ ngrok http 5000
 ```
+
+## Heroku에 배포하기
+
+flask 서버가 24시간 동작하게끔 하기위해서 배포 작업을 반드시 해야 한다. 헤로쿠를 통해 간단하게 git을 이용한 배포를 다음과 같이 진행한다.
+
+### 1. 설정
+
+1. Procfile 생성
+
+   ```
+   web: python app.py
+   ```
+
+   - Procfile은 확장자가 없음을 유의하자!
+
+2. runtime.txt 생성
+
+   ```
+   python-3.7.3
+   ```
+
+### 2. 헤로쿠 서버 배포
+
+```bash
+$ heroku login
+$ heroku create {프로젝트명}
+```
+
+- 중복된 프로젝트 명이나, 대문자 혹은 특수문자 사용시 프로젝트가 생성되지 않으므로 실행 결과를 반드시 확인하자!
+- 배포를 위해서는 현재까지 작성된 내용을 커밋 하여야한다.
+
+```bash
+$ git push heroku master
+```
+
+- 배포가 완료된 이후에는 코드 수정 사항이 있으면 항상 커밋 하고 push를 한다.
+- 이후에 웹훅 설정을 heroku 주소로 변경하면, 24시간 동작하는 챗봇이 된다!
+- 만약, 코드 수정사항이 있으면 개발을 위해 ngrok 주소로 웹훅 설정을 변경하고, 개발이 완료되면 heroku에 재배포 이후 heroku 주소로 웹훅 설정을 변경하자!
